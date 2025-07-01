@@ -39,9 +39,8 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Gambar selamat datang (gunakan gambar dari assets)
             Image.asset(
-              'assets/images/travel_welcome.png', // Pastikan gambar ini ada di assets
+              'assets/images/.png', 
               height: 200,
             ),
             const SizedBox(height: 20),
