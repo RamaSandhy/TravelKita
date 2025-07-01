@@ -16,3 +16,14 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   String? selectedSeat;
   final TextEditingController namaController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => BookingBloc(BookingRepository()),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Booking Kursi')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
