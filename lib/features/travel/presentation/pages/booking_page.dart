@@ -50,3 +50,21 @@ class _BookingPageState extends State<BookingPage> {
                 }),
               ),
               const SizedBox(height: 16),
+                            TextField(
+                controller: namaController,
+                decoration: const InputDecoration(labelText: 'Nama Pemesan'),
+              ),
+              const SizedBox(height: 20),
+              BlocConsumer<BookingBloc, BookingState>(
+                listener: (context, state) {
+                  if (state is BookingSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Booking berhasil!')),
+                    );
+                    Navigator.pop(context);
+                  } else if (state is BookingFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message)),
+                    );
+                  }
+                },
