@@ -27,7 +27,7 @@ class _BookingPageState extends State<BookingPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+            children: [
               Text('${widget.jadwal.asal} → ${widget.jadwal.tujuan}'),
               Text('Tanggal: ${widget.jadwal.tanggal} | Jam: ${widget.jadwal.jam}'),
               Text('Harga: Rp${widget.jadwal.harga}'),
@@ -50,7 +50,7 @@ class _BookingPageState extends State<BookingPage> {
                 }),
               ),
               const SizedBox(height: 16),
-                            TextField(
+              TextField(
                 controller: namaController,
                 decoration: const InputDecoration(labelText: 'Nama Pemesan'),
               ),
@@ -86,21 +86,20 @@ class _BookingPageState extends State<BookingPage> {
                                   );
                             }
                           },
-                          builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: state is BookingSubmitting
-                                ? null
-                                : () {
-                                    if (selectedSeat != null && namaController.text.isNotEmpty) {
-                                      context.read<BookingBloc>().add(
-                                            SubmitBooking(
-                                              Booking(
-                                                id: 0,
-                                                jadwalId: widget.jadwal.id,
-                                                nama: namaController.text,
-                                                kursi: selectedSeat!,
-                                              ),
-                                            ),
-                                          );
-                                    }
-                                  },
+                    child: state is BookingSubmitting
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Pesan Tiket'),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
