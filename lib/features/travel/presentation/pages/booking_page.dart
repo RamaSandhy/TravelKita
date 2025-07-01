@@ -68,3 +68,21 @@ class _BookingPageState extends State<BookingPage> {
                     );
                   }
                 },
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: state is BookingSubmitting
+                        ? null
+                        : () {
+                            if (selectedSeat != null && namaController.text.isNotEmpty) {
+                              context.read<BookingBloc>().add(
+                                    SubmitBooking(
+                                      Booking(
+                                        id: 0,
+                                        jadwalId: widget.jadwal.id,
+                                        nama: namaController.text,
+                                        kursi: selectedSeat!,
+                                      ),
+                                    ),
+                                  );
+                            }
+                          },
