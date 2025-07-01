@@ -27,3 +27,26 @@ class _BookingPageState extends State<BookingPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+              Text('${widget.jadwal.asal} → ${widget.jadwal.tujuan}'),
+              Text('Tanggal: ${widget.jadwal.tanggal} | Jam: ${widget.jadwal.jam}'),
+              Text('Harga: Rp${widget.jadwal.harga}'),
+              const SizedBox(height: 16),
+              const Text('Pilih Kursi:'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(6, (index) {
+                  final kursi = 'A${index + 1}';
+                  return ChoiceChip(
+                    label: Text(kursi),
+                    selected: selectedSeat == kursi,
+                    onSelected: (_) {
+                      setState(() {
+                        selectedSeat = kursi;
+                      });
+                    },
+                  );
+                }),
+              ),
+              const SizedBox(height: 16),
