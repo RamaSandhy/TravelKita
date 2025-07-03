@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/travel/presentation/pages/home_page.dart';
+import 'core/router.dart';
 
 void main() {
   runApp(const TravelKitaApp());
@@ -12,10 +12,9 @@ class TravelKitaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TravelKita',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: '/',
     );
   }
 }

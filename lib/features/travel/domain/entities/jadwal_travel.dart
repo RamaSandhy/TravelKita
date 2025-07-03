@@ -1,31 +1,51 @@
 class JadwalTravel {
-  final int id;
-  final String asal;
-  final String tujuan;
-  final String tanggal;
-  final String jam;
+  final String id;
+  final String kotaAsal;
+  final String kotaTujuan;
+  final DateTime tanggal;
+  final String jamKeberangkatan;
   final int harga;
-  final String armada;
+  final String tipeMobil;
+  final int kapasitas;
+  final int kursiTersedia;
 
   JadwalTravel({
     required this.id,
-    required this.asal,
-    required this.tujuan,
+    required this.kotaAsal,
+    required this.kotaTujuan,
     required this.tanggal,
-    required this.jam,
+    required this.jamKeberangkatan,
     required this.harga,
-    required this.armada,
+    required this.tipeMobil,
+    required this.kapasitas,
+    required this.kursiTersedia,
   });
 
   factory JadwalTravel.fromJson(Map<String, dynamic> json) {
     return JadwalTravel(
       id: json['id'],
-      asal: json['asal'],
-      tujuan: json['tujuan'],
-      tanggal: json['tanggal'],
-      jam: json['jam'],
+      kotaAsal: json['kota_asal'],
+      kotaTujuan: json['kota_tujuan'],
+      tanggal: DateTime.parse(json['tanggal']),
+      jamKeberangkatan: json['jam_keberangkatan'],
       harga: json['harga'],
-      armada: json['armada'],
+      tipeMobil: json['tipe_mobil'],
+      kapasitas: json['kapasitas'],
+      kursiTersedia: json['kursi_tersedia'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'kota_asal': kotaAsal,
+      'kota_tujuan': kotaTujuan,
+      'tanggal': tanggal.toIso8601String(),
+      'jam_keberangkatan': jamKeberangkatan,
+      'harga': harga,
+      'tipe_mobil': tipeMobil,
+      'kapasitas': kapasitas,
+      'kursi_tersedia': kursiTersedia,
+    };
   }
 }
