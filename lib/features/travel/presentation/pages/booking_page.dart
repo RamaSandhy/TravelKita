@@ -123,30 +123,25 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   void _submitBooking() {
-  if (_formKey.currentState!.validate()) {
-    final nama = _namaController.text;
-    final hp = _nomorHpController.text;
+    if (_formKey.currentState!.validate()) {
+      final nama = _namaController.text;
+      final hp = _nomorHpController.text;
 
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Booking Berhasil'),
-        content: Text(
-          'Terima kasih $nama!\nBooking untuk $selectedSeat telah dikonfirmasi.',
+      // TODO: Simpan ke backend atau local DB
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Booking Berhasil'),
+          content: Text(
+              'Terima kasih $nama!\nBooking untuk ${selectedSeat!} telah dikonfirmasi.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
+              child: const Text('Kembali ke Beranda'),
+            )
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomePage()),
-                (route) => false,
-              );
-            },
-            child: const Text('Kembali ke Beranda'),
-          ),
-        ],
-      ),
-    );
+      );
+    }
   }
 }
