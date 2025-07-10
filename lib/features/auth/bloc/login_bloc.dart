@@ -1,19 +1,35 @@
+// presentation/bloc/auth_bloc.dart
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'login_event.dart';
-import 'login_state.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:travelkita/features/auth/bloc/login_event.dart';
+import 'package:travelkita/features/auth/bloc/login_state.dart';
+import 'package:travelkita/features/auth/data/models/request/login_request_model.dart';
+import 'package:travelkita/features/auth/data/repositories/auth_repository.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial()) {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final AuthRepository repository;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
+  AuthBloc({required this.repository}) : super(AuthInitial()) {
     on<LoginSubmitted>((event, emit) async {
-      emit(LoginLoading());
-      await Future.delayed(const Duration(seconds: 2)); // Simulasi login
+      emit(AuthLoading());
 
-      // Simulasi validasi sederhana
-      if (event.email == 'user@example.com' && event.password == '123456') {
-        emit(LoginSuccess());
-      } else {
-        emit(LoginFailure('Email atau password salah'));
-      }
+      final result = await repository.login(
+        LoginRequestModel(email: event.email, password: event.password),
+      );
+
+      // result.fold ini bisa async juga, jadi pastikan pakai async di closure
+      await result.fold(
+        (failure) async {
+          emit(AuthFailure(failure));
+        },
+        (loginResponse) async {
+          await secureStorage.write(key: 'token', value: loginResponse.token);
+          emit(AuthSuccess(user: loginResponse));
+        },
+      );
     });
+
   }
 }
