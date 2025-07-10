@@ -1,13 +1,19 @@
-abstract class LoginState {}
+import 'package:travelkita/features/auth/data/models/response/login_response_model.dart';
 
-class LoginInitial extends LoginState {}
+abstract class AuthState {}
 
-class LoginLoading extends LoginState {}
+class AuthInitial extends AuthState {}
 
-class LoginSuccess extends LoginState {}
+class AuthLoading extends AuthState {}
 
-class LoginFailure extends LoginState {
+class AuthSuccess extends AuthState {
+  final LoginResponseModel user;  // pakai LoginResponseModel
+
+  AuthSuccess({required this.user});
+}
+
+class AuthFailure extends AuthState {
   final String error;
 
-  LoginFailure(this.error);
+  AuthFailure(this.error);
 }
