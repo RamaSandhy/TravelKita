@@ -1,78 +1,78 @@
+// presentation/auth/login_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/login_bloc.dart';
-import '../../bloc/login_event.dart';
-import '../../bloc/login_state.dart';
+import 'package:travelkita/features/auth/bloc/login_bloc.dart';
+import 'package:travelkita/features/auth/bloc/login_event.dart';
+import 'package:travelkita/features/auth/bloc/login_state.dart';
+import 'package:travelkita/features/auth/data/repositories/auth_repository.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login TravelKita')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: BlocProvider(
-          create: (_) => LoginBloc(),
-          child: BlocListener<LoginBloc, LoginState>(
-            listener: (context, state) {
-              if (state is LoginSuccess) {
-                // Navigasi ke HomePage atau Dashboard
-                Navigator.pushReplacementNamed(context, '/home');
-              } else if (state is LoginFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error)),
-                );
-              }
-            },
-            child: BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 24),
-                    state is LoginLoading
-                        ? const CircularProgressIndicator()
-                        : SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                final email = _emailController.text.trim();
-                                final password = _passwordController.text.trim();
+    return BlocProvider(
+      create: (_) => AuthBloc(repository: AuthRepository()),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Login')),
+        body: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Login berhasil')),
+              );
 
-                                context.read<LoginBloc>().add(
-                                      LoginSubmitted(email, password),
-                                    );
-                              },
-                              child: const Text('Login'),
-                            ),
-                          ),
-                  ],
-                );
-              },
-            ),
-          ),
+              // Cek role user lalu navigasi sesuai role
+              if (state.user.role == 'admin') {
+                // Navigasi ke halaman admin (misal sementara ke /menu dulu)
+                // Navigator.pushReplacementNamed(context, '/home');
+              } else {
+                // User biasa diarahkan ke homepage
+                Navigator.pushReplacementNamed(context, '/menu');
+              }
+            } else if (state is AuthFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Login gagal: ${state.error}')),
+              );
+            }
+          },
+
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                  ),
+                  TextField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  state is AuthLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () {
+                            final email = emailController.text;
+                            final password = passwordController.text;
+
+                            context.read<AuthBloc>().add(
+                                  LoginSubmitted(email: email, password: password),
+                                );
+                          },
+                          child: const Text('Login'),
+                        ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
