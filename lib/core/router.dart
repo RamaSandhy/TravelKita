@@ -4,7 +4,9 @@ import 'package:travelkita/features/travel/domain/entities/jadwal_travel.dart';
 import 'package:travelkita/features/travel/presentation/user_pages/home_page.dart';
 import 'package:travelkita/features/travel/presentation/user_pages/booking_page.dart';
 import 'package:travelkita/features/travel/presentation/user_pages/detail_travel_page.dart';
-import 'package:travelkita/features/travel/presentation/user_pages/home_menu_page.dart'; // ini halaman awal
+import 'package:travelkita/features/travel/presentation/user_pages/home_menu_page.dart';
+import 'package:travelkita/features/travel/presentation/user_pages/map_page.dart';
+
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +32,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => BookingPage(jadwalTravel: jadwal),
         );
+
+      case '/map':
+        return MaterialPageRoute(builder: (_) => MapPage());
+
 
       // Admin
 
